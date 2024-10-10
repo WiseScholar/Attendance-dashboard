@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System - Home</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="https://ciltinternational.org/wp-content/uploads/2023/06/GCTU-Logo-600x600.jpg" alt="Logo" class="logo"> <!-- Add your logo here -->
+            <div class="header-title">
+                <h1>Welcome to the Attendance System</h1>
+                <nav>
+                    <ul>
+                        <li><a href="#" onclick="navigateTo('attendance')">Attendance Sheet</a></li>
+                        <li><a href="#" onclick="navigateTo('history')">Attendance History</a></li>
+                        <li><a href="#" onclick="navigateTo('reports')">Statistics & Reports</a></li>
+                        <li><a href="#" onclick="navigateTo('settings')">Settings</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="content">
+        <section class="intro">
+            <h2>Select a feature to begin</h2>
+            <p>Click one of the options above to manage attendance, view reports, or configure settings.</p>
+        </section>
+
+        <!-- Attendance Statistics Section -->
+        <section class="statistics">
+            <h2>Attendance Statistics</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Students</h3>
+                    <p id="totalStudents">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Present</h3>
+                    <p id="totalPresent">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Absent</h3>
+                    <p id="totalAbsent">0</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Attendance System &copy; 2024</p>
+    </footer>
+
+    <script src="scripts.js"></script> <!-- Link to external JavaScript -->
+</body>
+</html>

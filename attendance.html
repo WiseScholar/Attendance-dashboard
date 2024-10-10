@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar button {
+            padding: 10px;
+            text-align: left;
+            margin: 10px 20px;
+            font-size: 18px;
+            display: block;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .sidebar button:hover {
+            background-color: #575757;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+        }
+
+        #sidebarButton {
+            font-size: 24px;
+            cursor: pointer;
+            position: fixed;
+            right: 20px;
+            top: 20px;
+        }
+
+        /* Hide buttons during print */
+        @media print {
+            .sidebar, #sidebarButton {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="sidebarButton" onclick="openSidebar()">☰</div>
+
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">×</a>
+    <button onclick="startNewAttendance()">Start New Lecture Attendance</button>
+    <button onclick="viewPreviousAttendance()">View Previous Attendance</button>
+    <button onclick="printAttendance()">Print Attendance</button>
+</div>
+
+<div class="container">
+    <h1>Attendance Sheet</h1>
+
+    <div class="section">
+        <h2>Faculty of Engineering</h2>
+        <div class="grid-container">
+            <div>
+                <label for="programme">Programme</label>
+                <input type="text" id="programme" placeholder="Enter programme">
+            </div>
+            <div>
+                <label for="intake">Intake (Month)</label>
+                <select id="intake">
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                </select>
+            </div>
+            <div>
+                <label for="date">Date</label>
+                <input type="date" id="date">
+            </div>
+            <div>
+                <label for="courseTitle">Course Title</label>
+                <input type="text" id="courseTitle" placeholder="Enter course title">
+            </div>
+            <div>
+                <label for="courseCode">Course Code</label>
+                <input type="text" id="courseCode" placeholder="Enter course code">
+            </div>
+            <div>
+                <label for="level">Level</label>
+                <select id="level">
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="400">400</option>
+                </select>
+            </div>
+            <div>
+                <label for="startTime">Start Time</label>
+                <input type="time" id="startTime">
+            </div>
+            <div>
+                <label for="endTime">End Time</label>
+                <input type="time" id="endTime">
+            </div>
+            <div>
+                <label for="courseRep">Course Representative Name</label>
+                <input type="text" id="courseRep" placeholder="Enter course rep name">
+            </div>
+            <div>
+                <label for="lecturer">Lecturer's Name</label>
+                <input type="text" id="lecturer" placeholder="Enter lecturer name">
+            </div>
+            <div>
+                <label for="lecturerStatus">Lecturer's Status</label>
+                <select id="lecturerStatus">
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <table id="attendanceTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Attendance records will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let previousAttendance = []; // Array to store previous attendance records
+    let lastDisplayedId = null; // Variable to store the last displayed student's ID
+    let lastDetails = {}; // Object to store the last details of the attendance session
+
+    // Fetch attendance data from the ESP8266
+    function fetchAttendanceData() {
+        fetch('/attendance')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Assuming your ESP8266 sends JSON
+            })
+            .then(data => {
+                // Check if the received data is an object (for a single student's data)
+                if (typeof data === 'object' && !Array.isArray(data)) {
+                    // Check if this student's data is already displayed
+                    if (data.id !== lastDisplayedId) {
+                        // Update the attendance table with the fetched data
+                        const tableBody = document.getElementById('attendanceTable').querySelector('tbody');
+
+                        // Create a new row for the attendance data
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${data.id}</td>
+                            <td>${data.name}</td>
+                            <td>${data.status}</td>
+                        `;
+                        tableBody.appendChild(row); // Append the new row to the table
+
+                        // Update the last displayed ID to prevent duplicates
+                        lastDisplayedId = data.id;
+                    } else {
+                        console.log("Attendance data already displayed for ID: " + data.id);
+                    }
+                } else {
+                    console.error("Unexpected data format:", data);
+                }
+            })
+            .catch(error => console.error('Fetch error:', error));
+    }
+
+    // Set an interval to fetch data every few seconds
+    setInterval(fetchAttendanceData, 5000); // Adjust the interval as needed
+
+    // Open the sidebar
+    function openSidebar() {
+        document.getElementById("mySidebar").style.width = "250px";
+    }
+
+    // Close the sidebar
+    function closeSidebar() {
+        document.getElementById("mySidebar").style.width = "0";
+    }
+
+    // Function to start a new attendance sheet
+    function startNewAttendance() {
+        // Save the current attendance to previousAttendance
+        const currentAttendance = [...document.getElementById('attendanceTable').querySelectorAll('tbody tr')].map(row => ({
+            id: row.cells[0].innerText,
+            name: row.cells[1].innerText,
+            status: row.cells[2].innerText
+        }));
+
+        // Save form data
+        lastDetails = {
+            programme: document.getElementById('programme').value,
+            intake: document.getElementById('intake').value,
+            date: document.getElementById('date').value,
+            courseTitle: document.getElementById('courseTitle').value,
+            courseCode: document.getElementById('courseCode').value,
+            level: document.getElementById('level').value,
+            startTime: document.getElementById('startTime').value,
+            endTime: document.getElementById('endTime').value,
+            courseRep: document.getElementById('courseRep').value,
+            lecturer: document.getElementById('lecturer').value,
+            lecturerStatus: document.getElementById('lecturerStatus').value
+        };
+
+        previousAttendance.push({
+            attendance: currentAttendance,
+            details: lastDetails
+        });
+
+        // Reset the attendance data on the ESP8266
+        fetch('/reset')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to reset attendance data');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);  // Log success message from ESP8266
+                // Now proceed to clear the table
+                const tableBody = document.getElementById('attendanceTable').querySelector('tbody');
+                tableBody.innerHTML = '';  // Clear previous entries
+                lastDisplayedId = null;  // Reset last displayed ID
+
+                alert("Starting a new lecture attendance sheet.");
+                // Clear the attendance form
+                document.querySelectorAll('input').forEach(input => input.value = '');
+                document.getElementById('intake').value = '';
+                document.getElementById('level').value = '';
+                document.getElementById('lecturerStatus').value = 'present';
+            })
+            .catch(error => console.error('Error resetting attendance data:', error));
+    }
+
+    // Function to view the previous attendance
+    function viewPreviousAttendance() {
+        if (previousAttendance.length === 0) {
+            alert("No previous attendance records available.");
+            return;
+        }
+
+        const lastSession = previousAttendance.pop(); // Get the last attendance record
+
+        // Restore the details in the form
+        document.getElementById('programme').value = lastSession.details.programme;
+        document.getElementById('intake').value = lastSession.details.intake;
+        document.getElementById('date').value = lastSession.details.date;
+        document.getElementById('courseTitle').value = lastSession.details.courseTitle;
+        document.getElementById('courseCode').value = lastSession.details.courseCode;
+        document.getElementById('level').value = lastSession.details.level;
+        document.getElementById('startTime').value = lastSession.details.startTime;
+        document.getElementById('endTime').value = lastSession.details.endTime;
+        document.getElementById('courseRep').value = lastSession.details.courseRep;
+        document.getElementById('lecturer').value = lastSession.details.lecturer;
+        document.getElementById('lecturerStatus').value = lastSession.details.lecturerStatus;
+
+        // Restore the attendance in the table
+        const tableBody = document.getElementById('attendanceTable').querySelector('tbody');
+        tableBody.innerHTML = ''; // Clear the table before inserting previous data
+
+        lastSession.attendance.forEach(record => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${record.id}</td>
+                <td>${record.name}</td>
+                <td>${record.status}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Function to print the attendance table
+    function printAttendance() {
+        window.print();
+    }
+</script>
+
+</body>
+</html>

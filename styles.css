@@ -1,0 +1,154 @@
+/* General styling for the body */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f0f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Styling for the header */
+header {
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    padding: 20px 20px;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo styling */
+.logo {
+    width: 100px; /* Adjust logo size */
+    height: auto;
+    margin-right: 20px; /* Space between logo and title */
+}
+
+/* Header title and navigation styling */
+.header-title {
+    flex-grow: 1; /* Take remaining space */
+}
+
+.header-title h1 {
+    color: white;
+    font-size: 28px;
+    margin: 0;
+    margin-left: 290px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 20px 0 0 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Main section styling */
+main {
+    padding: 50px;
+    text-align: center;
+}
+
+.intro h2 {
+    font-size: 28px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.intro p {
+    font-size: 20px;
+    color: #666;
+}
+
+/* Attendance Statistics Section */
+.statistics {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around; /* Space out the cards evenly */
+    margin-top: 20px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 200px;
+}
+
+.stat-card h3 {
+    margin: 0;
+    color: #333;
+}
+
+.stat-card p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50; /* Change color for better visibility */
+}
+
+/* Footer styling */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add some hover effects and interactive styling */
+a {
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #ffecb3;
+}
+
+/* Responsive Design: Adjust for smaller screens */
+@media (max-width: 768px) {
+    .header-title h1 {
+        font-size: 24px;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .stats {
+        flex-direction: column; /* Stack the cards on smaller screens */
+    }
+
+    .stat-card {
+        margin: 10px 0; /* Add margin between cards */
+        width: auto; /* Allow cards to resize */
+    }
+}
